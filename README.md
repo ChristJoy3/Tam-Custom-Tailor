@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tam Custom Tailor — website
 
-## Getting Started
+Single-page static site (Next.js 16, App Router, Tailwind v4, GSAP + Lenis).
 
-First, run the development server:
+## Run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev                 # http://localhost:3000
+npm run dev -- -H 0.0.0.0   # test on a phone/tablet via http://<your-LAN-IP>:3000
+npm run build               # static export -> out/  (upload that folder to any host)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Set `NEXT_PUBLIC_SITE_URL` (e.g. `https://www.example.com`) before building once the
+final domain is known; it is used for canonical, Open Graph, robots and sitemap URLs.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Content & images
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- All copy lives in `src/data/content.ts` (taken from the old Weebly site).
+- Photos: `assets/photos/` holds the source images (not deployed). They are currently
+  **free CC0 sample photos** (see `assets/photos/CREDITS.md`) standing in for the client's
+  own photography. To replace one, overwrite the file with the same name and run
+  `npm run images`; it regenerates AVIF/WebP/JPEG sizes and `src/data/images.generated.json`.
+  The `photo` / `alt` / `position` fields per slot live in `src/data/content.ts`; remove
+  `photo` to fall back to a labelled placeholder frame.
+- `public/logo.png` is used unmodified. `npm run images` also writes proportional
+  downscales of it plus the OG image and icons (logo on ivory).
 
-## Learn More
+## Structure
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/components/sections/` — page sections in scroll order
+- `src/components/ui/` — RevealText, RevealImage, Preloader, Navbar, MenuOverlay,
+  Cursor, MagneticButton, Marquee, Logo, Picture, PlaceholderFrame
+- `src/lib/motion.ts` — shared easing, durations, breakpoints (gsap.matchMedia)
+- `src/lib/gsap.ts` — plugin registration; `src/components/providers/SmoothScroll.tsx` — Lenis ↔ GSAP
